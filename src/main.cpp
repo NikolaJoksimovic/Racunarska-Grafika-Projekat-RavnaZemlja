@@ -58,50 +58,52 @@ int main()
     glEnable(GL_DEPTH_TEST);
 
     float vertices[] = {
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-            0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+            -0.5f, -0.01f, -0.5f,  0.0f, 0.0f, // skorz donja
+            0.5f, -0.01f, -0.5f,  1.0f, 0.0f,
+            0.5f,  0.01f, -0.5f,  1.0f, 1.0f,
+            0.5f,  0.01f, -0.5f,  1.0f, 1.0f,
+            -0.5f,  0.01f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.01f, -0.5f,  0.0f, 0.0f,
 
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+            -0.5f, -0.01f,  0.5f,  0.0f, 0.0f,
+            0.5f, -0.01f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.01f,  0.5f,  1.0f, 1.0f,
+            0.5f,  0.01f,  0.5f,  1.0f, 1.0f,
+            -0.5f,  0.01f,  0.5f,  0.0f, 1.0f,
+            -0.5f, -0.01f,  0.5f,  0.0f, 0.0f,
 
-            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            -0.5f,  0.01f,  0.5f,  1.0f, 0.0f,
+            -0.5f,  0.01f, -0.5f,  1.0f, 1.0f,
+            -0.5f, -0.01f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.01f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.01f,  0.5f,  0.0f, 0.0f,
+            -0.5f,  0.01f,  0.5f,  1.0f, 0.0f,
 
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.01f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.01f, -0.5f,  1.0f, 1.0f,
+            0.5f, -0.01f, -0.5f,  0.0f, 1.0f,
+            0.5f, -0.01f, -0.5f,  0.0f, 1.0f,
+            0.5f, -0.01f,  0.5f,  0.0f, 0.0f,
+            0.5f,  0.01f,  0.5f,  1.0f, 0.0f,
 
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-            -0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-            -0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-            0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-            -0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-            -0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+            -0.5f,  0.01f, -0.5f,  0.0f, 1.0f,
+            0.5f,  0.01f, -0.5f,  1.0f, 1.0f,
+            0.5f,  0.01f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.01f,  0.5f,  1.0f, 0.0f,
+            -0.5f,  0.01f,  0.5f,  0.0f, 0.0f,
+            -0.5f,  0.01f, -0.5f,  0.0f, 1.0f
     };
 
-    unsigned int VBO, VAO;
+    float bottom_vertices[] = {
+            -0.5f, -0.01f, -0.5f,  0.0f, 1.0f, //ovo je ispod zemlje
+            0.5f, -0.01f, -0.5f,  1.0f, 1.0f,
+            0.5f, -0.01f,  0.5f,  1.0f, 0.0f,
+            0.5f, -0.01f,  0.5f,  1.0f, 0.0f,
+            -0.5f, -0.01f,  0.5f,  0.0f, 0.0f,
+            -0.5f, -0.01f, -0.5f,  0.0f, 1.0f,
+    };
+
+    unsigned int VBO, VAO, VBO1, VAO1;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
 
@@ -116,23 +118,35 @@ int main()
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
+    //Donji deo zemlje
+    glGenVertexArrays(1, &VAO1);
+    glGenBuffers(1, &VBO1);
+
+    glBindVertexArray(VAO1);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO1);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(bottom_vertices), bottom_vertices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
 
 
 
 
-    Shader ourShader("/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earth.vs",
+
+    Shader earthShader("/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earth.vs",
+                     "/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earth.fs");
+    Shader seaShader("/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earth.vs",
                      "/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earth.fs");
 
-    Tex2D t0 = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/awesomeface.png");
-    Tex2D t1 = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/container.jpg");
+    Tex2D t0 = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/earth.jpg");
+    Tex2D t1 = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/sea.jpg");
 
-
-    ourShader.use();
-    ourShader.setInt("t0", 0);
-    ourShader.setInt("t1", 1);
-
-
-
+    earthShader.use();
+    earthShader.setInt("t0", 0);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -146,26 +160,30 @@ int main()
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, t0.getId());
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, t1.getId());
-
-
-        ourShader.use();
+        earthShader.use();
 
 
         glm::mat4 projection = glm::perspective(glm::radians(camera.getZoom()), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        ourShader.setMat4("projection", projection);
+        earthShader.setMat4("projection", projection);
 
         glm::mat4 view = camera.getCameraView();
-        ourShader.setMat4("view", view);
+        earthShader.setMat4("view", view);
 
         glm::mat4 model = glm::mat4(1.0f);
-        ourShader.setMat4("model", model);
+        earthShader.setMat4("model", model);
+
+
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, t0.getId());
 
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        glBindTexture(GL_TEXTURE_2D, t1.getId());
+        glBindVertexArray(VAO1);
+        glDrawArrays(GL_TRIANGLES, 0, 6);
+
 
         glfwSwapBuffers(window);
         glfwPollEvents();

@@ -1,0 +1,10 @@
+/home/joksa/Desktop/ProjekatRG/Projekat/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/joksa/Desktop/ProjekatRG/Projekat/cmake-build-debug/CMakeFiles/project_base.dir
+/home/joksa/Desktop/ProjekatRG/Projekat/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/joksa/Desktop/ProjekatRG/Projekat/cmake-build-debug/CMakeFiles/STB_IMAGE.dir
+/home/joksa/Desktop/ProjekatRG/Projekat/cmake-build-debug/libs/glad/CMakeFiles/edit_cache.dir
+/home/joksa/Desktop/ProjekatRG/Projekat/cmake-build-debug/libs/glad/CMakeFiles/rebuild_cache.dir
+/home/joksa/Desktop/ProjekatRG/Projekat/cmake-build-debug/libs/glad/CMakeFiles/glad.dir
+/home/joksa/Desktop/ProjekatRG/Projekat/cmake-build-debug/libs/imgui/CMakeFiles/rebuild_cache.dir
+/home/joksa/Desktop/ProjekatRG/Projekat/cmake-build-debug/libs/imgui/CMakeFiles/edit_cache.dir
+/home/joksa/Desktop/ProjekatRG/Projekat/cmake-build-debug/libs/imgui/CMakeFiles/imgui.dir

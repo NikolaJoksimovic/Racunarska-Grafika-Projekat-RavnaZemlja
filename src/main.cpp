@@ -6,7 +6,6 @@
 #include <iostream>
 #include <learnopengl/MyCamera.h>
 #include <learnopengl/2DTexture.h>
-#include <learnopengl/Sun.h>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -159,9 +158,6 @@ int main()
             -0.5f,  0.5f,  0.5f,
             -0.5f,  0.5f, -0.5f,
     };
-
-    //Sun sun = Sun();
-    //Sun
     unsigned int sunVBO, sunVAO;
     glGenVertexArrays(1, &sunVAO);
     glGenBuffers(1, &sunVBO);
@@ -281,19 +277,12 @@ int main()
 
         //Podesavamje svetla___________________
 
-        //Spotlight svetlo
-        earthShader.setVec3("spotLight.position", camera.getPosition());
-        earthShader.setVec3("spotLight.direction", camera.getFront());
-        earthShader.setFloat("spotLight.cutOff", glm::radians(glm::cos(12.5f)));
-        earthShader.setFloat("spotLight.outerCutOff", glm::radians(glm::cos(14.5f)));
+        //Dierkciono svetlo
+        earthShader.setVec3("spotLight.direction", glm::vec3(0.0f,1.0f,0.0f));
 
         earthShader.setVec3("spotLight.ambient", glm::vec3(0.0f));
         earthShader.setVec3("spotLight.diffuse", glm::vec3(0.9f));
         earthShader.setVec3("spotLight.specular", glm::vec3(0.9f));
-
-        earthShader.setFloat("spotLight.constant", 1.0f);
-        earthShader.setFloat("spotLight.linear", 0.09f);
-        earthShader.setFloat("spotLight.quadratic", 0.032f);
 
         //Point svetla
         earthShader.setVec3("pointLight.position", pointLightPosition);

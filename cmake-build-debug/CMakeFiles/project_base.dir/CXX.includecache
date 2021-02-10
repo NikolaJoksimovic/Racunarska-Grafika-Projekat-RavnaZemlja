@@ -28,8 +28,6 @@ stb_image.h
 
 ../include/learnopengl/MyCamera.h
 
-../include/learnopengl/Sun.h
-
 ../include/learnopengl/shader_m.h
 glad/glad.h
 -
@@ -104,7 +102,5 @@ iostream
 learnopengl/MyCamera.h
 -
 learnopengl/2DTexture.h
--
-learnopengl/Sun.h
 -
 

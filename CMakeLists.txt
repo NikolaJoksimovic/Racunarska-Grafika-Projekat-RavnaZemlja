@@ -42,7 +42,7 @@ include_directories(${CMAKE_BINARY_DIR}/configuration)
 
 include_directories(include/)
 add_executable(${PROJECT_NAME}
-        ${SOURCES} include/learnopengl/MyCamera.h)
+        ${SOURCES} include/learnopengl/MyCamera.h include/learnopengl/2DTexture.h)
 
 target_link_libraries(${PROJECT_NAME} ${LIBS})
 

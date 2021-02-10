@@ -14,15 +14,19 @@ fstream
 sstream
 -
 
-../include/learnopengl/MyCamera.h
-
-../include/learnopengl/filesystem.h
+../include/learnopengl/2DTexture.h
+glad/glad.h
+-
+GLFW/glfw3.h
+-
+glm/glm.hpp
+-
 string
 -
-cstdlib
+stb_image.h
 -
-root_directory.h
-../include/learnopengl/root_directory.h
+
+../include/learnopengl/MyCamera.h
 
 ../include/learnopengl/shader_m.h
 glad/glad.h
@@ -87,13 +91,9 @@ glad/glad.h
 -
 GLFW/glfw3.h
 -
-stb_image.h
--
 glm/glm.hpp
 -
 glm/gtc/matrix_transform.hpp
--
-learnopengl/filesystem.h
 -
 learnopengl/shader_m.h
 -
@@ -101,6 +101,6 @@ iostream
 -
 learnopengl/MyCamera.h
 -
-
-configuration/root_directory.h
+learnopengl/2DTexture.h
+-
 

@@ -6,6 +6,7 @@
 #include <iostream>
 #include <learnopengl/MyCamera.h>
 #include <learnopengl/2DTexture.h>
+#include <learnopengl/model.h>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -23,9 +24,11 @@ float lastY =  600.0 / 2.0;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
-glm::vec3 pointLightPosition = glm::vec3(2.0f, 3.0f, 1.45f);
+glm::vec3 pointLightPosition;
 
 Camera camera = Camera();
+
+bool update = false;
 
 int main()
 {
@@ -239,8 +242,12 @@ int main()
 
     Shader earthShader("/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earth.vs",
                      "/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earth.fs");
+
     Shader sunShader("/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/sun.vs",
                      "/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/sun.fs");
+
+    Shader earthModelShader("/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earthModel.vs",
+                            "/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earthModel.fs");
 
     Tex2D mapDiffuseEarth = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/earth.jpg");
     Tex2D mapEarthSpecular = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/earth_specular_improved.jpg");
@@ -251,7 +258,7 @@ int main()
     earthShader.setInt("material.diffuse", 0);
     earthShader.setInt("material.specular", 1);
 
-
+    Model earthModel = Model("/home/joksa/Desktop/ProjekatRG/Projekat/resources/objects/Earth/world/world.obj");
 
     glEnable(GL_DEPTH_TEST);
 
@@ -267,116 +274,145 @@ int main()
         glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        earthShader.use();
-        //View Position
-
-        earthShader.setVec3("viewPos", camera.getPosition());
-
-        //Postavljamo materijal
-        earthShader.setFloat("material.shininess", 12.0f);
 
 
-        //Podesavamje svetla___________________
-
-        //Dierkciono svetlo
-        earthShader.setVec3("spotLight.direction", glm::vec3(0.0f,1.0f,0.0f));
-
-        earthShader.setVec3("spotLight.ambient", glm::vec3(0.0f));
-        earthShader.setVec3("spotLight.diffuse", glm::vec3(0.5f));
-        earthShader.setVec3("spotLight.specular", glm::vec3(0.5f));
-
-        //Point svetla
-        earthShader.setVec3("pointLight.position", pointLightPosition);
-
-        earthShader.setVec3("pointLight.ambient", glm::vec3(0.1f));
-        earthShader.setVec3("pointLight.diffuse", glm::vec3(0.9f));
-        earthShader.setVec3("pointLight.specular", glm::vec3(0.9f));
-
-        earthShader.setFloat("pointLight.constant", 1.0f);
-        earthShader.setFloat("pointLight.linear", 0.09f);
-        earthShader.setFloat("pointLight.quadratic", 0.032f);
-
-
-        //_____________________________________
-
-
-
-        glm::mat4 projection = glm::perspective(glm::radians(camera.getZoom()), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-        earthShader.setMat4("projection", projection);
-
+        glm::mat4 projection = glm::perspective(glm::radians(camera.getZoom()),(float) SCR_WIDTH / (float) SCR_HEIGHT, 0.1f, 100.0f);
         glm::mat4 view = camera.getCameraView();
-        earthShader.setMat4("view", view);
-
         glm::mat4 model = glm::mat4(1.0f);
-        earthShader.setMat4("model", model);
 
 
-        //Zemlja
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, mapDiffuseSea.getId());
+        if(!update){
+            earthShader.use();
+            //View Position
+            model = glm::mat4(1.0f);
 
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, mapEarthSpecular.getId());
+            earthShader.setMat4("projection", projection);
+            earthShader.setMat4("view", view);
+            earthShader.setMat4("model", model);
 
-        glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 24);
 
-        //Zemlja donja strana
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, mapDiffuseSea.getId());
+            earthShader.setVec3("viewPos", camera.getPosition());
+            pointLightPosition = glm::vec3(2.0f * glm::sin((float)glfwGetTime() * 0.5), 1.0f, 1.05f * glm::cos((float)glfwGetTime() * 0.5));
 
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, mapSeaSpecular.getId());
-        glBindVertexArray(VAO1);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-        //Zemlja gornja strana
-        glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, mapDiffuseEarth.getId());
+            //Postavljamo materijal
+            earthShader.setFloat("material.shininess", 12.0f);
 
-        glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, mapEarthSpecular.getId());
-        glBindVertexArray(VAO2);
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
-        //Drawing sun
+            //Podesavamje svetla___________________
 
-        sunShader.use();
+            //Dierkciono svetlo
+            earthShader.setVec3("spotLight.direction", glm::vec3(0.0f, 1.0f, 0.0f));
 
-        model = glm::mat4(1.0f);
-        model = glm::translate(model, pointLightPosition);
-        model = glm::scale(model, glm::vec3(0.2));
-        sunShader.setMat4("model", model);
-        sunShader.setMat4("view", view);
-        sunShader.setMat4("projection", projection);
+            earthShader.setVec3("spotLight.ambient", glm::vec3(0.0f));
+            earthShader.setVec3("spotLight.diffuse", glm::vec3(0.5f));
+            earthShader.setVec3("spotLight.specular", glm::vec3(0.5f));
 
-        glBindVertexArray(sunVAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+            //Point svetla
+            earthShader.setVec3("pointLight.position", pointLightPosition);
 
+            earthShader.setVec3("pointLight.ambient", glm::vec3(0.1f));
+            earthShader.setVec3("pointLight.diffuse", glm::vec3(0.9f));
+            earthShader.setVec3("pointLight.specular", glm::vec3(0.9f));
+
+            earthShader.setFloat("pointLight.constant", 1.0f);
+            earthShader.setFloat("pointLight.linear", 0.09f);
+            earthShader.setFloat("pointLight.quadratic", 0.032f);
+            //_____________________________________
+
+
+            //Zemlja
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, mapDiffuseSea.getId());
+
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, mapEarthSpecular.getId());
+
+            glBindVertexArray(VAO);
+            glDrawArrays(GL_TRIANGLES, 0, 24);
+
+            //Zemlja donja strana
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, mapDiffuseSea.getId());
+
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, mapSeaSpecular.getId());
+            glBindVertexArray(VAO1);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+            //Zemlja gornja strana
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, mapDiffuseEarth.getId());
+
+            glActiveTexture(GL_TEXTURE1);
+            glBindTexture(GL_TEXTURE_2D, mapEarthSpecular.getId());
+            glBindVertexArray(VAO2);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+            //Drawing sun
+
+            sunShader.use();
+
+            model = glm::mat4(1.0f);
+            model = glm::translate(model, pointLightPosition);
+            model = glm::scale(model, glm::vec3(0.2));
+            sunShader.setMat4("model", model);
+            sunShader.setMat4("view", view);
+            sunShader.setMat4("projection", projection);
+
+            glBindVertexArray(sunVAO);
+            glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        }
+        else{
+
+            //Zemlja kruzna
+
+            earthModelShader.use();
+
+            model = glm::mat4(1.0f);
+            model = glm::scale(model, glm::vec3(1.25f)); //Ne moze da se skalira ocigledno
+            model = glm::rotate(model, (float)(glfwGetTime() * 0.1), glm::vec3(-0.5, -0.5, -0.5));
+            earthModelShader.setMat4("model", model);
+            earthModelShader.setMat4("view", view);
+            earthModelShader.setMat4("projection", projection);
+
+            earthModel.Draw(earthModelShader);
+        }
 
         glfwSwapBuffers(window);
         glfwPollEvents();
     }
 
-    glDeleteVertexArrays(1, &VAO);
-    glDeleteBuffers(1, &VBO);
-
     glfwTerminate();
     return 0;
 }
 
-void processInput(GLFWwindow *window)
-{
-    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
+void processInput(GLFWwindow *window) {
+    if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS){
         glfwSetWindowShouldClose(window, true);
-    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS)
+    }
+
+    if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS){
         camera.ProcessKeyboard(FORWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS)
+    }
+    if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS){
         camera.ProcessKeyboard(BACKWARD, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS)
+    }
+    if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
         camera.ProcessKeyboard(LEFT, deltaTime);
-    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
+    }
+    if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
         camera.ProcessKeyboard(RIGHT, deltaTime);
+    }
+
+    if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
+        update = true;
+    }
+
+    if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS){
+        update = false;
+    }
 }
 
 

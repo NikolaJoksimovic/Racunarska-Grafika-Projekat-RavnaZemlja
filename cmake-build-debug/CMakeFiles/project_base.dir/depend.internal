@@ -5,6 +5,7 @@ CMakeFiles/project_base.dir/src/main.cpp.o
  ../include/common.h
  ../include/learnopengl/2DTexture.h
  ../include/learnopengl/MyCamera.h
+ ../include/learnopengl/Sun.h
  ../include/learnopengl/shader_m.h
  ../include/stb_image.h
  ../libs/glad/include/KHR/khrplatform.h

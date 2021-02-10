@@ -6,6 +6,7 @@
 #include <iostream>
 #include <learnopengl/MyCamera.h>
 #include <learnopengl/2DTexture.h>
+#include <learnopengl/Sun.h>
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
@@ -90,7 +91,7 @@ int main()
 
     };
 
-    //Donji deo zemlje, vertices
+    //Donji deo Zemlje, vertices
     float bottom_vertices[] = {
             -0.5f, -0.01f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
             0.5f, -0.01f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
@@ -98,8 +99,9 @@ int main()
             -0.5f, -0.01f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f
     };
 
+    //Gorlji deo Zemlje, veritces
     float top_vertices[] = {
-            -0.5f,  0.01f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f, //top
+            -0.5f,  0.01f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
             0.5f,  0.01f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
             0.5f,  0.01f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
             -0.5f,  0.01f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
@@ -114,6 +116,66 @@ int main()
         0, 2, 3
     };
 
+    float sun_vertices[] = {
+            -0.5f, -0.5f, -0.5f,
+            0.5f, -0.5f, -0.5f,
+            0.5f,  0.5f, -0.5f,
+            0.5f,  0.5f, -0.5f,
+            -0.5f,  0.5f, -0.5f,
+            -0.5f, -0.5f, -0.5f,
+
+            -0.5f, -0.5f,  0.5f,
+            0.5f, -0.5f,  0.5f,
+            0.5f,  0.5f,  0.5f,
+            0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f,  0.5f,
+            -0.5f, -0.5f,  0.5f,
+
+            -0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f, -0.5f,
+            -0.5f, -0.5f, -0.5f,
+            -0.5f, -0.5f, -0.5f,
+            -0.5f, -0.5f,  0.5f,
+            -0.5f,  0.5f,  0.5f,
+
+            0.5f,  0.5f,  0.5f,
+            0.5f,  0.5f, -0.5f,
+            0.5f, -0.5f, -0.5f,
+            0.5f, -0.5f, -0.5f,
+            0.5f, -0.5f,  0.5f,
+            0.5f,  0.5f,  0.5f,
+
+            -0.5f, -0.5f, -0.5f,
+            0.5f, -0.5f, -0.5f,
+            0.5f, -0.5f,  0.5f,
+            0.5f, -0.5f,  0.5f,
+            -0.5f, -0.5f,  0.5f,
+            -0.5f, -0.5f, -0.5f,
+
+            -0.5f,  0.5f, -0.5f,
+            0.5f,  0.5f, -0.5f,
+            0.5f,  0.5f,  0.5f,
+            0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f,  0.5f,
+            -0.5f,  0.5f, -0.5f,
+    };
+
+    //Sun sun = Sun();
+    //Sun
+    unsigned int sunVBO, sunVAO;
+    glGenVertexArrays(1, &sunVAO);
+    glGenBuffers(1, &sunVBO);
+
+    glBindVertexArray(sunVAO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, sunVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(sun_vertices), sun_vertices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+
+    // Earth
     unsigned int VBO, VAO, VBO1, VAO1, EBO1, VBO2, VAO2, EBO2;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
@@ -181,9 +243,11 @@ int main()
 
     Shader earthShader("/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earth.vs",
                      "/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earth.fs");
+    Shader sunShader("/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/sun.vs",
+                     "/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/sun.fs");
 
     Tex2D mapDiffuseEarth = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/earth.jpg");
-    Tex2D mapSpecular = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/container2_specular.png");
+    Tex2D mapSpecular = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/earth_specular.jpg");
     Tex2D mapDiffuseSea = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/sea.jpg");
 
     earthShader.use();
@@ -212,7 +276,7 @@ int main()
         earthShader.setVec3("viewPos", camera.getPosition());
 
         //Postavljamo materijal
-        earthShader.setFloat("material.shininess", 32.0f);
+        earthShader.setFloat("material.shininess", 12.0f);
 
 
         //Podesavamje svetla___________________
@@ -220,8 +284,8 @@ int main()
         //Spotlight svetlo
         earthShader.setVec3("spotLight.position", camera.getPosition());
         earthShader.setVec3("spotLight.direction", camera.getFront());
-        earthShader.setFloat("spotLight.cutOff", glm::radians(glm::cos(0.5f)));
-        earthShader.setFloat("spotLight.outerCutOff", glm::radians(glm::cos(1.0f)));
+        earthShader.setFloat("spotLight.cutOff", glm::radians(glm::cos(12.5f)));
+        earthShader.setFloat("spotLight.outerCutOff", glm::radians(glm::cos(14.5f)));
 
         earthShader.setVec3("spotLight.ambient", glm::vec3(0.0f));
         earthShader.setVec3("spotLight.diffuse", glm::vec3(0.9f));
@@ -265,7 +329,7 @@ int main()
         glBindTexture(GL_TEXTURE_2D, mapSpecular.getId());
 
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 30);
+        glDrawArrays(GL_TRIANGLES, 0, 24);
 
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, mapDiffuseSea.getId());
@@ -282,6 +346,20 @@ int main()
         glBindTexture(GL_TEXTURE_2D, mapSpecular.getId());
         glBindVertexArray(VAO2);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        //Drawing sun
+
+        sunShader.use();
+
+        model = glm::mat4(1.0f);
+        model = glm::translate(model, pointLightPosition);
+        model = glm::scale(model, glm::vec3(0.2));
+        sunShader.setMat4("model", model);
+        sunShader.setMat4("view", view);
+        sunShader.setMat4("projection", projection);
+
+        glBindVertexArray(sunVAO);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
 
         glfwSwapBuffers(window);

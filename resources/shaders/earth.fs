@@ -53,9 +53,9 @@ void main()
     vec3 viewDir = normalize(viewPos - FragPos);
 
 
-    vec3 result;
+    vec3 result = vec3(0.0);
     result = CalcPointLight(pointLight, norm, FragPos, viewDir); // Stavljamo prvi izvor svetla u rezultujucu projekciju svetla
-    result += CalcSpotLight(spotLight, norm, FragPos, viewDir);       // pa dodajemo i drugi izvor..
+    //result += CalcSpotLight(spotLight, norm, FragPos, viewDir);       // pa dodajemo i drugi izvor..
 
     FragColor = vec4(result, 1.0);
 }

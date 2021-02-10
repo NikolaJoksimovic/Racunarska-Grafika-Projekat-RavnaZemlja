@@ -23,6 +23,8 @@ float lastY =  600.0 / 2.0;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
+glm::vec3 pointLightPosition = glm::vec3(2.0f, 3.0f, 1.45f);
+
 Camera camera = Camera();
 
 int main()
@@ -55,60 +57,64 @@ int main()
     }
 
 
-    glEnable(GL_DEPTH_TEST);
-
     //Zemlja, vertices
     float vertices[] = {
-            -0.5f, -0.01f, -0.5f,  0.0f, 0.0f,
-            0.5f, -0.01f, -0.5f,  1.0f, 0.0f,
-            0.5f,  0.01f, -0.5f,  1.0f, 1.0f,
-            0.5f,  0.01f, -0.5f,  1.0f, 1.0f,
-            -0.5f,  0.01f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.01f, -0.5f,  0.0f, 0.0f,
+            // vertices           //normale           // Texcoords
+            -0.5f, -0.01f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+            0.5f, -0.01f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
+            0.5f,  0.01f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+            0.5f,  0.01f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+            -0.5f,  0.01f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
+            -0.5f, -0.01, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
 
-            -0.5f, -0.01f,  0.5f,  0.0f, 0.0f,
-            0.5f, -0.01f,  0.5f,  1.0f, 0.0f,
-            0.5f,  0.01f,  0.5f,  1.0f, 1.0f,
-            0.5f,  0.01f,  0.5f,  1.0f, 1.0f,
-            -0.5f,  0.01f,  0.5f,  0.0f, 1.0f,
-            -0.5f, -0.01f,  0.5f,  0.0f, 0.0f,
+            -0.5f, -0.01f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+            0.5f, -0.01f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
+            0.5f,  0.01f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+            0.5f,  0.01f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+            -0.5f,  0.01f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
+            -0.5f, -0.01f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
 
-            -0.5f,  0.01f,  0.5f,  1.0f, 0.0f,
-            -0.5f,  0.01f, -0.5f,  1.0f, 1.0f,
-            -0.5f, -0.01f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.01f, -0.5f,  0.0f, 1.0f,
-            -0.5f, -0.01f,  0.5f,  0.0f, 0.0f,
-            -0.5f,  0.01f,  0.5f,  1.0f, 0.0f,
+            -0.5f,  0.01f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+            -0.5f,  0.01f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+            -0.5f, -0.01f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+            -0.5f, -0.01f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+            -0.5f, -0.01f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+            -0.5f,  0.01f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-            0.5f,  0.01f,  0.5f,  1.0f, 0.0f,
-            0.5f,  0.01f, -0.5f,  1.0f, 1.0f,
-            0.5f, -0.01f, -0.5f,  0.0f, 1.0f,
-            0.5f, -0.01f, -0.5f,  0.0f, 1.0f,
-            0.5f, -0.01f,  0.5f,  0.0f, 0.0f,
-            0.5f,  0.01f,  0.5f,  1.0f, 0.0f,
+            0.5f,  0.01f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+            0.5f,  0.01f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+            0.5f, -0.01f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+            0.5f, -0.01f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+            0.5f, -0.01f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+            0.5f,  0.01f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
 
-            -0.5f,  0.01f, -0.5f,  0.0f, 1.0f,
-            0.5f,  0.01f, -0.5f,  1.0f, 1.0f,
-            0.5f,  0.01f,  0.5f,  1.0f, 0.0f,
-            0.5f,  0.01f,  0.5f,  1.0f, 0.0f,
-            -0.5f,  0.01f,  0.5f,  0.0f, 0.0f,
-            -0.5f,  0.01f, -0.5f,  0.0f, 1.0f
     };
 
     //Donji deo zemlje, vertices
     float bottom_vertices[] = {
-            -0.5f, -0.01f, -0.5f,  0.0f, 1.0f, // --
-            0.5f, -0.01f, -0.5f,  1.0f, 1.0f, // +-
-            0.5f, -0.01f,  0.5f,  1.0f, 0.0f, // ++
-            -0.5f, -0.01f,  0.5f,  0.0f, 0.0f, // -+
+            -0.5f, -0.01f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+            0.5f, -0.01f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
+            0.5f, -0.01f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+            -0.5f, -0.01f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f
+    };
+
+    float top_vertices[] = {
+            -0.5f,  0.01f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f, //top
+            0.5f,  0.01f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+            0.5f,  0.01f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+            -0.5f,  0.01f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
     };
 
     unsigned int bottom_indices[] = {
         0, 1, 2,
         0, 2, 3
     };
+    unsigned int top_indices[] = {
+        0, 1, 2,
+        0, 2, 3
+    };
 
-    unsigned int VBO, VAO, VBO1, VAO1, EBO1;
+    unsigned int VBO, VAO, VBO1, VAO1, EBO1, VBO2, VAO2, EBO2;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
 
@@ -117,11 +123,14 @@ int main()
     glBindBuffer(GL_ARRAY_BUFFER, VBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
+
+    glVertexAttribPointer(2, 2, GL_UNSIGNED_INT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
     //Donji deo zemlje, object attributes
     glGenVertexArrays(1, &VAO1);
@@ -136,12 +145,36 @@ int main()
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO1);
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(bottom_indices), bottom_indices, GL_STATIC_DRAW);
 
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
 
-    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
+    //Dodajem Gornji deo zemlje
+    glGenVertexArrays(1, &VAO2);
+    glGenBuffers(1, &VBO2);
+    glGenBuffers(1, &EBO2);
+
+    glBindVertexArray(VAO2);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO2);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(top_vertices), top_vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO2);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(top_indices), top_indices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
 
 
 
@@ -149,11 +182,17 @@ int main()
     Shader earthShader("/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earth.vs",
                      "/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earth.fs");
 
-    Tex2D t0 = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/earth.jpg");
-    Tex2D t1 = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/sea.jpg");
+    Tex2D mapDiffuseEarth = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/earth.jpg");
+    Tex2D mapSpecular = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/container2_specular.png");
+    Tex2D mapDiffuseSea = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/sea.jpg");
 
     earthShader.use();
-    earthShader.setInt("t0", 0);
+    earthShader.setInt("material.diffuse", 0);
+    earthShader.setInt("material.specular", 1);
+
+
+
+    glEnable(GL_DEPTH_TEST);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -168,6 +207,44 @@ int main()
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
         earthShader.use();
+        //View Position
+
+        earthShader.setVec3("viewPos", camera.getPosition());
+
+        //Postavljamo materijal
+        earthShader.setFloat("material.shininess", 32.0f);
+
+
+        //Podesavamje svetla___________________
+
+        //Spotlight svetlo
+        earthShader.setVec3("spotLight.position", camera.getPosition());
+        earthShader.setVec3("spotLight.direction", camera.getFront());
+        earthShader.setFloat("spotLight.cutOff", glm::radians(glm::cos(0.5f)));
+        earthShader.setFloat("spotLight.outerCutOff", glm::radians(glm::cos(1.0f)));
+
+        earthShader.setVec3("spotLight.ambient", glm::vec3(0.0f));
+        earthShader.setVec3("spotLight.diffuse", glm::vec3(0.9f));
+        earthShader.setVec3("spotLight.specular", glm::vec3(0.9f));
+
+        earthShader.setFloat("spotLight.constant", 1.0f);
+        earthShader.setFloat("spotLight.linear", 0.09f);
+        earthShader.setFloat("spotLight.quadratic", 0.032f);
+
+        //Point svetla
+        earthShader.setVec3("pointLight.position", pointLightPosition);
+
+        earthShader.setVec3("pointLight.ambient", glm::vec3(0.1f));
+        earthShader.setVec3("pointLight.diffuse", glm::vec3(0.9f));
+        earthShader.setVec3("pointLight.specular", glm::vec3(0.9f));
+
+        earthShader.setFloat("pointLight.constant", 1.0f);
+        earthShader.setFloat("pointLight.linear", 0.09f);
+        earthShader.setFloat("pointLight.quadratic", 0.032f);
+
+
+        //_____________________________________
+
 
 
         glm::mat4 projection = glm::perspective(glm::radians(camera.getZoom()), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
@@ -182,13 +259,28 @@ int main()
 
 
         glActiveTexture(GL_TEXTURE0);
-        glBindTexture(GL_TEXTURE_2D, t0.getId());
+        glBindTexture(GL_TEXTURE_2D, mapDiffuseSea.getId());
+
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, mapSpecular.getId());
 
         glBindVertexArray(VAO);
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        glDrawArrays(GL_TRIANGLES, 0, 30);
 
-        glBindTexture(GL_TEXTURE_2D, t1.getId());
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, mapDiffuseSea.getId());
+
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, mapSpecular.getId());
         glBindVertexArray(VAO1);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+
+        glActiveTexture(GL_TEXTURE0);
+        glBindTexture(GL_TEXTURE_2D, mapDiffuseEarth.getId());
+
+        glActiveTexture(GL_TEXTURE1);
+        glBindTexture(GL_TEXTURE_2D, mapSpecular.getId());
+        glBindVertexArray(VAO2);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 

@@ -90,6 +90,13 @@ public:
     float getZoom(){
         return zoom;
     }
+
+    glm::vec3 getPosition(){
+        return Position;
+    }
+    glm::vec3 getFront(){
+        return Front;
+    }
 };
 
 

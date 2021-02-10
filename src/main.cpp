@@ -243,7 +243,8 @@ int main()
                      "/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/sun.fs");
 
     Tex2D mapDiffuseEarth = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/earth.jpg");
-    Tex2D mapSpecular = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/earth_specular.jpg");
+    Tex2D mapEarthSpecular = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/earth_specular_improved.jpg");
+    Tex2D mapSeaSpecular = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/signature.jpg");
     Tex2D mapDiffuseSea = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/sea.jpg");
 
     earthShader.use();
@@ -281,8 +282,8 @@ int main()
         earthShader.setVec3("spotLight.direction", glm::vec3(0.0f,1.0f,0.0f));
 
         earthShader.setVec3("spotLight.ambient", glm::vec3(0.0f));
-        earthShader.setVec3("spotLight.diffuse", glm::vec3(0.9f));
-        earthShader.setVec3("spotLight.specular", glm::vec3(0.9f));
+        earthShader.setVec3("spotLight.diffuse", glm::vec3(0.5f));
+        earthShader.setVec3("spotLight.specular", glm::vec3(0.5f));
 
         //Point svetla
         earthShader.setVec3("pointLight.position", pointLightPosition);
@@ -310,29 +311,31 @@ int main()
         earthShader.setMat4("model", model);
 
 
-
+        //Zemlja
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, mapDiffuseSea.getId());
 
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, mapSpecular.getId());
+        glBindTexture(GL_TEXTURE_2D, mapEarthSpecular.getId());
 
         glBindVertexArray(VAO);
         glDrawArrays(GL_TRIANGLES, 0, 24);
 
+        //Zemlja donja strana
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, mapDiffuseSea.getId());
 
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, mapSpecular.getId());
+        glBindTexture(GL_TEXTURE_2D, mapSeaSpecular.getId());
         glBindVertexArray(VAO1);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
+        //Zemlja gornja strana
         glActiveTexture(GL_TEXTURE0);
         glBindTexture(GL_TEXTURE_2D, mapDiffuseEarth.getId());
 
         glActiveTexture(GL_TEXTURE1);
-        glBindTexture(GL_TEXTURE_2D, mapSpecular.getId());
+        glBindTexture(GL_TEXTURE_2D, mapEarthSpecular.getId());
         glBindVertexArray(VAO2);
         glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 

@@ -236,6 +236,9 @@
 				</MakeCommands>
 			</Target>
 		</Build>
+		<Unit filename="/home/joksa/Desktop/ProjekatRG/Projekat/include/learnopengl/MyCamera.h">
+			<Option target="project_base"/>
+		</Unit>
 		<Unit filename="/home/joksa/Desktop/ProjekatRG/Projekat/libs/glad/include/glad/glad.h">
 			<Option target="glad"/>
 		</Unit>

@@ -73,12 +73,13 @@ public:
     }
 private:
     unsigned int VAO;
+
     void setupMesh() {
 
         unsigned int VBO;
         unsigned int EBO;
 
-        glGenVertexArray(1, &VAO);
+        glGenVertexArrays(1, &VAO);
         glGenBuffers(1, &VBO);
         glGenBuffers(1, &EBO);
 

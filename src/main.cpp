@@ -57,8 +57,9 @@ int main()
 
     glEnable(GL_DEPTH_TEST);
 
+    //Zemlja, vertices
     float vertices[] = {
-            -0.5f, -0.01f, -0.5f,  0.0f, 0.0f, // skorz donja
+            -0.5f, -0.01f, -0.5f,  0.0f, 0.0f,
             0.5f, -0.01f, -0.5f,  1.0f, 0.0f,
             0.5f,  0.01f, -0.5f,  1.0f, 1.0f,
             0.5f,  0.01f, -0.5f,  1.0f, 1.0f,
@@ -94,16 +95,20 @@ int main()
             -0.5f,  0.01f, -0.5f,  0.0f, 1.0f
     };
 
+    //Donji deo zemlje, vertices
     float bottom_vertices[] = {
-            -0.5f, -0.01f, -0.5f,  0.0f, 1.0f, //ovo je ispod zemlje
-            0.5f, -0.01f, -0.5f,  1.0f, 1.0f,
-            0.5f, -0.01f,  0.5f,  1.0f, 0.0f,
-            0.5f, -0.01f,  0.5f,  1.0f, 0.0f,
-            -0.5f, -0.01f,  0.5f,  0.0f, 0.0f,
-            -0.5f, -0.01f, -0.5f,  0.0f, 1.0f,
+            -0.5f, -0.01f, -0.5f,  0.0f, 1.0f, // --
+            0.5f, -0.01f, -0.5f,  1.0f, 1.0f, // +-
+            0.5f, -0.01f,  0.5f,  1.0f, 0.0f, // ++
+            -0.5f, -0.01f,  0.5f,  0.0f, 0.0f, // -+
     };
 
-    unsigned int VBO, VAO, VBO1, VAO1;
+    unsigned int bottom_indices[] = {
+        0, 1, 2,
+        0, 2, 3
+    };
+
+    unsigned int VBO, VAO, VBO1, VAO1, EBO1;
     glGenVertexArrays(1, &VAO);
     glGenBuffers(1, &VBO);
 
@@ -118,14 +123,18 @@ int main()
     glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)(3 * sizeof(float)));
     glEnableVertexAttribArray(1);
 
-    //Donji deo zemlje
+    //Donji deo zemlje, object attributes
     glGenVertexArrays(1, &VAO1);
     glGenBuffers(1, &VBO1);
+    glGenBuffers(1, &EBO1);
 
     glBindVertexArray(VAO1);
 
     glBindBuffer(GL_ARRAY_BUFFER, VBO1);
     glBufferData(GL_ARRAY_BUFFER, sizeof(bottom_vertices), bottom_vertices, GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO1);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(bottom_indices), bottom_indices, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void*)0);
     glEnableVertexAttribArray(0);
@@ -138,8 +147,6 @@ int main()
 
 
     Shader earthShader("/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earth.vs",
-                     "/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earth.fs");
-    Shader seaShader("/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earth.vs",
                      "/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earth.fs");
 
     Tex2D t0 = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/earth.jpg");
@@ -182,7 +189,7 @@ int main()
 
         glBindTexture(GL_TEXTURE_2D, t1.getId());
         glBindVertexArray(VAO1);
-        glDrawArrays(GL_TRIANGLES, 0, 6);
+        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 
 
         glfwSwapBuffers(window);

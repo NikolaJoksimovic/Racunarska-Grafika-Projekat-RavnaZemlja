@@ -377,6 +377,12 @@ int main()
             earthModelShader.setMat4("view", view);
             earthModelShader.setMat4("projection", projection);
 
+            earthModelShader.setVec3("dirLight.direction", glm::vec3(0.5f, 0.5f, -0.5f));
+            earthModelShader.setVec3("dirLight.ambient", glm::vec3(0.5f));
+            earthModelShader.setVec3("dirLight.diffuse",glm::vec3(0.9f));
+            earthModelShader.setVec3("dirLight.specular",glm::vec3(0.9f));
+            earthModelShader.setVec3("viewPosition", camera.getPosition());
+
             earthModel.Draw(earthModelShader);
         }
 

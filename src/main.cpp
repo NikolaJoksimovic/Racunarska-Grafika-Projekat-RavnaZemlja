@@ -12,6 +12,7 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height);
 void mouse_callback(GLFWwindow* window, double xpos, double ypos);
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
 void processInput(GLFWwindow *window);
+void keyboard_callback(GLFWwindow *window, int key, int scancode, int action, int mod);
 
 
 const unsigned int SCR_WIDTH = 800;
@@ -24,11 +25,14 @@ float lastY =  600.0 / 2.0;
 float deltaTime = 0.0f;
 float lastFrame = 0.0f;
 
+// Globals ______________________________
 glm::vec3 pointLightPosition;
-
+bool isNight = true;
 Camera camera = Camera();
-
 bool update = false;
+float rotationSpeed = 0.001f;
+glm::vec3 sunColor = glm::vec3(1.0f);
+//__________________________________
 
 int main()
 {
@@ -49,6 +53,7 @@ int main()
     glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
     glfwSetCursorPosCallback(window, mouse_callback);
     glfwSetScrollCallback(window, scroll_callback);
+    glfwSetKeyCallback(window, keyboard_callback);
 
 
 
@@ -258,9 +263,14 @@ int main()
     earthShader.setInt("material.diffuse", 0);
     earthShader.setInt("material.specular", 1);
 
+    // /home/joksa/Desktop/ProjekatRG/Projekat/resources/objects/backpack/backpack.obj
+    // /home/joksa/Desktop/ProjekatRG/Projekat/resources/objects/Earth/world/world.obj
+
     Model earthModel = Model("/home/joksa/Desktop/ProjekatRG/Projekat/resources/objects/Earth/world/world.obj");
 
     glEnable(GL_DEPTH_TEST);
+
+
 
     while (!glfwWindowShouldClose(window))
     {
@@ -271,7 +281,7 @@ int main()
 
         processInput(window);
 
-        glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
@@ -282,8 +292,9 @@ int main()
 
 
         if(!update){
+
             earthShader.use();
-            //View Position
+
             model = glm::mat4(1.0f);
 
             earthShader.setMat4("projection", projection);
@@ -312,7 +323,7 @@ int main()
             earthShader.setVec3("pointLight.position", pointLightPosition);
 
             earthShader.setVec3("pointLight.ambient", glm::vec3(0.1f));
-            earthShader.setVec3("pointLight.diffuse", glm::vec3(0.9f));
+            earthShader.setVec3("pointLight.diffuse", glm::vec3(sunColor));
             earthShader.setVec3("pointLight.specular", glm::vec3(0.9f));
 
             earthShader.setFloat("pointLight.constant", 1.0f);
@@ -359,6 +370,7 @@ int main()
             sunShader.setMat4("model", model);
             sunShader.setMat4("view", view);
             sunShader.setMat4("projection", projection);
+            sunShader.setVec3("outColor", sunColor);
 
             glBindVertexArray(sunVAO);
             glDrawArrays(GL_TRIANGLES, 0, 36);
@@ -368,20 +380,40 @@ int main()
 
             //Zemlja kruzna
 
+
             earthModelShader.use();
+
+
+            earthModelShader.setVec3("viewPosition", camera.getPosition());
 
             model = glm::mat4(1.0f);
             model = glm::scale(model, glm::vec3(1.25f)); //Ne moze da se skalira ocigledno
-            model = glm::rotate(model, (float)(glfwGetTime() * 0.1), glm::vec3(-0.5, -0.5, -0.5));
+
+            // x = rsinFcosG y = rsinFsinG z = cosG
+
+            model = glm::translate(model, glm::vec3(1.9f * glm::sin((float)glfwGetTime() * rotationSpeed),
+                                                       0.0f,
+                                                       1.9f * glm::cos((float)glfwGetTime() * rotationSpeed)));
+
+            //model = glm::rotate(model, (float)(glfwGetTime() * 0.1), glm::vec3(1.0, 0.0, 0.0));
+
+            model = glm::rotate(model, 3.14159f, glm::vec3(1.0, 0.0, 0.0));
+
+            model = glm::rotate(model, (float)(glfwGetTime() * rotationSpeed * 3.65f), glm::vec3(0.0, 0.5, -0.0));
+
             earthModelShader.setMat4("model", model);
             earthModelShader.setMat4("view", view);
             earthModelShader.setMat4("projection", projection);
 
-            earthModelShader.setVec3("dirLight.direction", glm::vec3(0.5f, 0.5f, -0.5f));
-            earthModelShader.setVec3("dirLight.ambient", glm::vec3(0.5f));
-            earthModelShader.setVec3("dirLight.diffuse",glm::vec3(0.9f));
-            earthModelShader.setVec3("dirLight.specular",glm::vec3(0.9f));
-            earthModelShader.setVec3("viewPosition", camera.getPosition());
+            earthModelShader.setVec3("pointLight.position", glm::vec3(0.0f, 0.0f, 0.0f));
+
+            earthModelShader.setVec3("pointLight.ambient", glm::vec3(0.2));
+            earthModelShader.setVec3("pointLight.diffuse",glm::vec3(0.6f, 0.5f, 0.6f));
+            earthModelShader.setVec3("pointLight.specular",glm::vec3(0.9f));
+
+            earthModelShader.setFloat("pointLight.constant", 1.0f);
+            earthModelShader.setFloat("pointLight.linear", 0.09f);
+            earthModelShader.setFloat("pointLight.quadratic", 0.032f);
 
             earthModel.Draw(earthModelShader);
         }
@@ -414,11 +446,41 @@ void processInput(GLFWwindow *window) {
 
     if(glfwGetKey(window, GLFW_KEY_UP) == GLFW_PRESS){
         update = true;
+
     }
 
     if(glfwGetKey(window, GLFW_KEY_DOWN) == GLFW_PRESS){
         update = false;
     }
+
+    if(glfwGetKey(window, GLFW_KEY_LEFT) == GLFW_PRESS){
+        if(rotationSpeed < 0.002f){
+            rotationSpeed = 0.001f;
+        }else{
+            rotationSpeed -= 0.001f;
+        }
+    }
+    if(glfwGetKey(window, GLFW_KEY_RIGHT) == GLFW_PRESS){
+        if(rotationSpeed > 5.0f){
+            rotationSpeed = 5.0f;
+        }else{
+            rotationSpeed += 0.001f;
+        }
+    }
+
+    if(glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS){
+        sunColor = glm::vec3(1.0, 0.0, 0.0);
+    }
+    if(glfwGetKey(window, GLFW_KEY_G) == GLFW_PRESS){
+        sunColor = glm::vec3(0.0, 1.0, 0.0);
+    }
+    if(glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS){
+        sunColor = glm::vec3(0.0, 0.0, 1.0);
+    }
+    if(glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS){
+        sunColor = glm::vec3(1.0, 1.0, 1.0);
+    }
+
 }
 
 
@@ -447,4 +509,30 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 void framebuffer_size_callback(GLFWwindow* window, int width, int height)
 {
     glViewport(0, 0, width, height);
+}
+
+void keyboard_callback(GLFWwindow *window, int key, int scancode, int action, int mod){
+    if(key == GLFW_KEY_O && action == GLFW_PRESS){
+        std::cerr   << "\t  OPTIONS\n"
+                    << "ESC\t\t\t\tEXIT\n"
+                    << "ARROW_UP\t\t\t\tUPGRADE\n"
+                    << "ARROW_DOWN\t\t\tDOWNGRADE\n"
+                    << "N   \t\t\tNIGHT/DAY\n"
+                    << "ARROW_LEFT\t\tSLOW DOWN AND GO BACK IN TIME\n"
+                    << "ARROW_RIGHT\t\tFAST FORWARD\n"
+                    << "R\t\t\t\tSUN COLOR RED\n"
+                    << "G\t\t\t\tSUN COLOR GREEN\n"
+                    << "B\t\t\t\tSUN COLOR RED BLUE\n"
+                    << "F\t\t\t\tSUN COLOR WHITE"
+                    << std::endl;
+    }
+    if(key == GLFW_KEY_N && action == GLFW_PRESS){
+        if(isNight){
+            glClearColor(0.05f, 0.05f, 0.05f, 1.0f);
+            isNight = false;
+        }else{
+            glClearColor(0.001f, 0.001f, 0.001f, 1.0f);
+            isNight = true;
+        }
+    }
 }

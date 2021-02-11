@@ -20,7 +20,7 @@ private:
     float cameraSpeed = 2.5;
     float sensitivity = 0.5;
 
-    glm::vec3 Position = glm::vec3(0.0f, 0.0f, 3.0f);
+    glm::vec3 Position = glm::vec3(0.0f, 0.0f, 6.0f);
     glm::vec3 Front = glm::vec3(0.0f, 0.0f, -1.0f);
     glm::vec3 Up = glm::vec3(0.0f, 1.0f, 0.0f);
     glm::vec3 Right = glm::normalize(glm::cross(Front, Up));
@@ -96,6 +96,10 @@ public:
     }
     glm::vec3 getFront(){
         return Front;
+    }
+
+    void setPosition(glm::vec3 newPos){
+        Position = newPos;
     }
 };
 

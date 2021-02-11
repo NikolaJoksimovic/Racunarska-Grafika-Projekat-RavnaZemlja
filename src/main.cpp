@@ -37,6 +37,8 @@ glm::vec3 sunColor = glm::vec3(1.0f);
 int main()
 {
 
+    std::cerr << "Type ""O"" for options" << std::endl;
+
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
@@ -245,28 +247,28 @@ int main()
 
 
 
-    Shader earthShader("/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earth.vs",
-                     "/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earth.fs");
+    Shader earthShader("resources/shaders/earth.vs",
+                     "resources/shaders/earth.fs");
 
-    Shader sunShader("/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/sun.vs",
-                     "/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/sun.fs");
+    Shader sunShader("resources/shaders/sun.vs",
+                     "resources/shaders/sun.fs");
 
-    Shader earthModelShader("/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earthModel.vs",
-                            "/home/joksa/Desktop/ProjekatRG/Projekat/resources/shaders/earthModel.fs");
+    Shader earthModelShader("resources/shaders/earthModel.vs",
+                            "resources/shaders/earthModel.fs");
 
-    Tex2D mapDiffuseEarth = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/earth.jpg");
-    Tex2D mapEarthSpecular = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/earth_specular_improved.jpg");
-    Tex2D mapSeaSpecular = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/signature.jpg");
-    Tex2D mapDiffuseSea = Tex2D("/home/joksa/Desktop/ProjekatRG/Projekat/resources/textures/sea.jpg");
+    Tex2D mapDiffuseEarth = Tex2D("resources/textures/earth.jpg");
+    Tex2D mapEarthSpecular = Tex2D("resources/textures/earth_specular_improved.jpg");
+    Tex2D mapSeaSpecular = Tex2D("resources/textures/signature.jpg");
+    Tex2D mapDiffuseSea = Tex2D("resources/textures/sea.jpg");
 
     earthShader.use();
     earthShader.setInt("material.diffuse", 0);
     earthShader.setInt("material.specular", 1);
 
-    // /home/joksa/Desktop/ProjekatRG/Projekat/resources/objects/backpack/backpack.obj
-    // /home/joksa/Desktop/ProjekatRG/Projekat/resources/objects/Earth/world/world.obj
+    // resources/objects/backpack/backpack.obj
+    // resources/objects/Earth/world/world.obj
 
-    Model earthModel = Model("/home/joksa/Desktop/ProjekatRG/Projekat/resources/objects/Earth/world/world.obj");
+    Model earthModel = Model("resources/objects/Earth/world/world.obj");
 
     glEnable(GL_DEPTH_TEST);
 
@@ -515,16 +517,19 @@ void keyboard_callback(GLFWwindow *window, int key, int scancode, int action, in
     if(key == GLFW_KEY_O && action == GLFW_PRESS){
         std::cerr   << "\t  OPTIONS\n"
                     << "ESC\t\t\t\tEXIT\n"
-                    << "ARROW_UP\t\t\t\tUPGRADE\n"
-                    << "ARROW_DOWN\t\t\tDOWNGRADE\n"
                     << "N   \t\t\tNIGHT/DAY\n"
-                    << "ARROW_LEFT\t\tSLOW DOWN AND GO BACK IN TIME\n"
-                    << "ARROW_RIGHT\t\tFAST FORWARD\n"
+                    << "\n FLAT EARTH_____________\n"
                     << "R\t\t\t\tSUN COLOR RED\n"
                     << "G\t\t\t\tSUN COLOR GREEN\n"
                     << "B\t\t\t\tSUN COLOR RED BLUE\n"
                     << "F\t\t\t\tSUN COLOR WHITE"
-                    << std::endl;
+                    << "ARROW_UP\t\tUPGRADE\n"
+                    << "\n SPHERICAL EARTH___________\n"
+                    << "ARROW_LEFT\t\tSLOW DOWN AND GO BACK IN TIME\n"
+                    << "ARROW_RIGHT\t\tFAST FORWARD\n"
+                    << "ARROW_DOWN\t\tDOWNGRADE\n"
+
+                << std::endl;
     }
     if(key == GLFW_KEY_N && action == GLFW_PRESS){
         if(isNight){
